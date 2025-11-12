@@ -1,4 +1,4 @@
-[] create_patient: Function used to create a patient from the registry.
+[x] create_patient: Function used to create a patient from the registry.
 [] view_departments: Function used to display all departments of the clinic, the services provided and the corresponding costs.
 [] create_provided_service: Function used to create a new hospitalization and corresponding services provided for a patient.
 [] calculate_cost: A function used to calculate the final cost that a patient will have to pay for their hospital stay.
