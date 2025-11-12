@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.dbclient-js": "javascript",
+        "business.h": "c",
+        "exposition.h": "c",
+        "infrastructure.h": "c",
+        "service_provided.h": "c",
+        "cstdlib": "c",
+        "office.h": "c",
+        "credential.h": "c",
+        "patient.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "service.h": "c"
+    },
+    "makefile.configureOnOpen": true
+}

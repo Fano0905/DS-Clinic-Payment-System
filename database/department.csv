@@ -1,0 +1,8 @@
+Department,Code,Ambulance_cost,Exclusive_Nursing_Care,Individual_Room
+Cardiology,CAR,10,50,100
+Orthopedic,ORT,15,55,110
+Psychiatric,PSY,10,50,80
+Dermatology,DER,25,75,90
+Endocrinology,END,20,70,110
+Hematology,HEM,20,70,110
+Neurology,NEU,10,50,90
