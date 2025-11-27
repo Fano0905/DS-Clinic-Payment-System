@@ -12,11 +12,11 @@
 // Generate a hospital identifier like "0001-DEPT-username"
 // Returns a malloc'ed string that the caller must free.
 // ---------------------------
-char *generate_hospital_identifier(const char *username, const char *department, List_Service_Provided *list_service_provided) {
+char *generate_hospital_identifier(const char *username, const char *department, List_Service_Provided *service_provided_list) {
     if (username == NULL || department == NULL) return NULL;
 
     // Get last id (may be NULL)
-    char *last_id = get_last_hospital_identifier_from_list(list_service_provided);
+    char *last_id = get_last_hospital_identifier_from_list(service_provided_list);
     int next_num = 1;
     if (last_id != NULL) {
         next_num = atoi(last_id) + 1;
@@ -209,9 +209,9 @@ List_Service_Provided *generate_service_provided_list(void){
     return create_service_list();
 }
 
-void list_all_departments(List_Department *list)
+void list_all_departments(List_Department *department_list)
 {
-    show_departments(list);
+    show_departments(department_list);
 }
 
 void list_all_departments_name(List_Department *department_list){
@@ -227,9 +227,9 @@ void list_all_services_provided(List_Service_Provided *service_provided_list){
     list_all_services(service_provided_list);
 }
 
-Patient *find_patient_by_uID(List_Patient *list, const char *username)
+Patient *find_patient_by_uID(List_Patient *patient_list, const char *username)
 {
-    return find_patient_by_username(list, username);
+    return find_patient_by_username(patient_list, username);
 }
 
 bool check_patient_exists(List_Patient *patient_list, const char *username)
@@ -242,18 +242,22 @@ bool check_patient_exists(List_Patient *patient_list, const char *username)
     return false;
 }
 
-void clear_all_departments(List_Department **list){
-    clear_list(list);
+void clear_all_departments(List_Department **department_list){
+    clear_list(department_list);
 }
 
-void clear_all_patients(List_Patient **list){
-    clear_patient_list(list);
+void clear_all_patients(List_Patient **patient_list){
+    clear_patient_list(patient_list);
 }
 
-void clear_all_services_provided(List_Service_Provided **list){
-    clear_service_list(list);
+void clear_all_services_provided(List_Service_Provided **service_provided_list){
+    clear_service_list(service_provided_list);
 }
 
-Service_Provided *find_service_by_username_ID(List_Service_Provided *head, const char *username){
-    return get_service_by_username(head, username);
+Service_Provided *find_service_by_username_ID(List_Service_Provided *service_provided_list, const char *username){
+    return get_service_by_username(service_provided_list, username);
+}
+
+bool hospital_ID_exists(List_Service_Provided *service_provided_list, const char *identifier){
+    return check_hospital_identifier_in_list(service_provided_list, identifier);
 }

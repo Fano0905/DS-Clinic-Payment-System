@@ -1,7 +1,14 @@
 #if !defined(SERVICE_H)
 #define SERVICE_H
 
-#include "business.h"
+#include "list_department.h"
+#include "list_patient.h"
+#include "list_service_provided.h"
+#include "list_payment_method.h"
+#include "chomp.h"
+#include <stdio.h>
+
+#define BUFFER_SIZE 1024
 
 /*CLINIC SERVICES*/
 

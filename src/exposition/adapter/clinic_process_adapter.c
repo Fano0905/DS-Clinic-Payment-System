@@ -21,7 +21,7 @@ void add_patient_info(List_Patient **patient_list){
     chomp(password);
 
     create_patient_record(fname, lname, username, password, patient_list);
-    if (patient_list != NULL){
+    if (find_patient_by_uID(*patient_list, username) != NULL){
         printf("Successfully created %s [%s + %s] in our database\n", username, fname, lname);
     } else{
         printf("Failed to create [%s]\n", username);

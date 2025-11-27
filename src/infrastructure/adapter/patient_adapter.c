@@ -177,6 +177,9 @@ void delete_payment_method(List_Payment_Method **head,
    -------------------------------------------------------- */
 void clear_payment_method_list(List_Payment_Method **head)
 {
+
+    puts("------ Clearing payment_method list ------");
+
     if (!head || !*head) return;
 
     List_Payment_Method *curr = *head;

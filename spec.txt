@@ -5,7 +5,7 @@
 [x] generate_provided_service_id: Function used to generate the unique nursing identifier.
 [x] generate_receipt: Function used to create and display the payment receipt.
 [x] patient_login: Function used to log a patient into the “Patient Dashboard” using the information created for him by the hospital secretariat.
-[] payment: Function used to pay for a hospitalization and the corresponding services provided.
+[x] payment: Function used to pay for a hospitalization and the corresponding services provided.
 
 Structs : 
 
@@ -40,8 +40,7 @@ struct Patient{
 for now :
     everything works fine
     improvements :
-        I need to implement error handling (if service == PAID ? : message)
-        Print multiple services and choose one
         I need to delete some printfs;
         Error handling before writing objects in database
+        Rename functions to facilitate reading and coherence between each modules
     

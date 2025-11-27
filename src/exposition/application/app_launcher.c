@@ -73,10 +73,10 @@ void run_application(){
         switch (option)
         {
         case 0:
-            printf("Exiting...\n");
             empty_patient_list(&patient_list);
             empty_services_provided_list(&service_provided_list);
             empty_payment_method_list(&payment_method_list);
+            puts("Exiting...");
             clear_screen();
             return;
         case 1:

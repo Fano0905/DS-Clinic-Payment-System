@@ -2,7 +2,7 @@
 #define EXPOSITION_H
 
 #include "office.h"
-#include "business.h"
+#include "service.h"
 #include "display.h"
 #include "patient_ui.h"
 #include <stdio.h>

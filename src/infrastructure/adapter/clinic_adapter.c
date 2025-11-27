@@ -277,6 +277,8 @@ void delete_dept(List_Department **head, const char *name) {
  */
 void clear_list(List_Department **head) {
 
+    puts("------ Clearing Department list ------");
+
     if (head == NULL){
         puts("The list is already empty.\n");
         return;
@@ -583,6 +585,8 @@ void delete_patient(List_Patient **head, const char *username) {
 */
 void clear_patient_list(List_Patient **head) {
 
+    puts("------ Clearing patient list ------");
+
     if (head == NULL){
         puts("The list is already empty.\n");
         return;
@@ -799,6 +803,9 @@ void delete_service(List_Service_Provided **head, const char *uh_ID)
 
 void clear_service_list(List_Service_Provided **head)
 {
+
+    puts("------ Clearing Service_provided list ------");
+
     if (head == NULL || *head == NULL) {
         printf("Service list is already empty.\n");
         return;
