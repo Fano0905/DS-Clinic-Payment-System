@@ -11,7 +11,24 @@
         "patient.h": "c",
         "stdlib.h": "c",
         "stdio.h": "c",
-        "service.h": "c"
+        "service.h": "c",
+        "display.h": "c",
+        "patient_ui.h": "c",
+        "department.h": "c",
+        "stdbool.h": "c",
+        "exposition_port.h": "c",
+        "infrastructure_port.h": "c",
+        "chomp.h": "c",
+        "list_department.h": "c",
+        "list": "c",
+        "list_patient.h": "c",
+        "string.h": "c",
+        "list_service_provided.h": "c",
+        "infrastructure_clinic_port.h": "c",
+        "patient_process_port.h": "c",
+        "infrastructure_patient_port.h": "c",
+        "list_payment_method.h": "c",
+        "clinic_process_port.h": "c"
     },
     "makefile.configureOnOpen": true
 }

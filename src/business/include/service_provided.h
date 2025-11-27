@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-typedef struct ServiceProvided
+typedef struct Service_Provided
 {
     char *uh_ID;
     char *patient_username;
@@ -14,7 +14,8 @@ typedef struct ServiceProvided
     bool exclusive_nurse_care;
     bool room;
     char *payment_status;
+    bool insurance_type;
 
-} ServiceProvided;
+} Service_Provided;
 
 #endif // SERVICE_PROVIDED_H

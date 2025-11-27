@@ -44,9 +44,27 @@ void display_clinic_menu(void)
     FILE *file;
     char line[256];
     
-    file = fopen("assets/clinic_services.txt", "r");
+    file = fopen("assets/office_screen.txt", "r");
     if (file == NULL) {
-        printf("Error opening clinic_services.txt\n");
+        printf("Error opening office_screen.txt\n");
+        return;
+    }
+    
+    while (fgets(line, sizeof(line), file) != NULL) {
+        printf("%s", line);
+    }
+    
+    fclose(file);
+}
+
+void display_patient_menu(void)
+{
+    FILE *file;
+    char line[256];
+    
+    file = fopen("assets/patient_screen.txt", "r");
+    if (file == NULL) {
+        printf("Error opening patient_screen.txt\n");
         return;
     }
     

@@ -1,0 +1,25 @@
+            ***************************************************************
+            *                          DS CLINIC                          *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *     COMMANDS :                                              *
+            *                                                             *
+            *     Press 0 to EXIT                                         *
+            *                                                             *
+            *     Press 1 for checking services                           *
+            *                                                             *
+            *     Press 2 for add payment method                          *
+            *                                                             *
+            *     Press 3 to pay for a service provided                   *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            *                                                             *
+            ***************************************************************

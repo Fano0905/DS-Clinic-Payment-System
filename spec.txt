@@ -1,10 +1,10 @@
 [x] create_patient: Function used to create a patient from the registry.
-[] view_departments: Function used to display all departments of the clinic, the services provided and the corresponding costs.
-[] create_provided_service: Function used to create a new hospitalization and corresponding services provided for a patient.
-[] calculate_cost: A function used to calculate the final cost that a patient will have to pay for their hospital stay.
-[] generate_provided_service_id: Function used to generate the unique nursing identifier.
-[] generate_receipt: Function used to create and display the payment receipt.
-[] patient_login: Function used to log a patient into the “Patient Dashboard” using the information created for him by the hospital secretariat.
+[x] view_departments: Function used to display all departments of the clinic, the services provided and the corresponding costs.
+[x] create_provided_service: Function used to create a new hospitalization and corresponding services provided for a patient.
+[x] calculate_cost: A function used to calculate the final cost that a patient will have to pay for their hospital stay.
+[x] generate_provided_service_id: Function used to generate the unique nursing identifier.
+[x] generate_receipt: Function used to create and display the payment receipt.
+[x] patient_login: Function used to log a patient into the “Patient Dashboard” using the information created for him by the hospital secretariat.
 [] payment: Function used to pay for a hospitalization and the corresponding services provided.
 
 Structs : 
@@ -36,3 +36,12 @@ struct Patient{
     password
 }
 
+/!\ Failed to make a listing of services : 
+for now :
+    everything works fine
+    improvements :
+        I need to implement error handling (if service == PAID ? : message)
+        Print multiple services and choose one
+        I need to delete some printfs;
+        Error handling before writing objects in database
+    

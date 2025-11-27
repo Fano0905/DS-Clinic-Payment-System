@@ -1,16 +1,6 @@
 #include "office.h"
-#include "service.h"
 #include "display.h"
-#include <stdlib.h>
-
-// Function to remove trailing newline characters from a string
-void chomp(char *s) {
-    size_t len = strlen(s);
-    while (len > 0 && (s[len-1] == '\n' || s[len-1] == '\r')) {
-        s[--len] = '\0';
-    }
-}
-
+#include "clinic_process_port.h"
 
 int login(Credentials credentials){
 
@@ -40,47 +30,54 @@ int login(Credentials credentials){
     return 0;
 }
 
-int add_patient_info(){
-
-    Patient patient = {0};
-
-    printf("Enter the first name: ");
-    fflush(stdout);
-    fgets(patient.fname, sizeof(patient.fname), stdin);
-    chomp(patient.fname);
-    strupr(patient.fname);
-    printf("Enter the last name: ");
-    fflush(stdout);
-    fgets(patient.lname, sizeof(patient.lname), stdin);
-    chomp(patient.lname);
-    strupr(patient.lname);
-    printf("Enter the username: ");
-    fflush(stdout);
-    fgets(patient.username, sizeof(patient.username), stdin);
-    chomp(patient.username);
-    printf("Enter the password: ");
-    fflush(stdout);
-    fgets(patient.password, sizeof(patient.password), stdin);
-    chomp(patient.password);
-
-    int result = create_patient_record(patient.fname, patient.lname, patient.username, patient.password);
-    return result;
-}
-
-void office(char *buffer)
+void office(List_Patient **patient_list, List_Service_Provided **service_provided_list, char *buffer)
 {
+    List_Department *department_list = auto_generate_list_departments();
     display_clinic_menu();
     if (strcmp(buffer, "0") == 0) {
         clear_screen();
         display_clinic_menu();
+        empty_department_list(&department_list);
     }
     if (strcmp(buffer, "1") == 0) {
         clear_screen();
         printf("Create patient selected.\n");
-        add_patient_info();
+        add_patient_info(patient_list);
     }
     if (strcmp(buffer, "2") == 0) {
         clear_screen();
         printf("Checkout patient selected.\n");
+        printf("------ Proceeding to checkout ------\n");
+        printf("Enter the username of the patient to search: "); 
+        fflush(stdout);
+        fgets(buffer, 128, stdin);
+        chomp(buffer);
+        if (get_patient_by_username(*patient_list, buffer)) {
+            printf("\nPatient with username '%s' found. Proceeding to checkout...\n", buffer);
+            proceed_to_checkout(buffer, department_list, service_provided_list);
+        } else {
+            printf("\nPatient with username '%s' not found.\n", buffer);
+        }
+    }
+    if (strcmp(buffer, "3") == 0) {
+        clear_screen();
+        printf("Show departments selected.\n");
+        list_departments(department_list);
+    }
+    if (strcmp(buffer, "4") == 0){
+        clear_screen();
+        printf("----- Searching patient. -----\n");
+        printf("Enter the username of the patient to search: "); fflush(stdout);
+        fgets(buffer, 128, stdin);
+        chomp(buffer);
+        Patient *patient = get_patient_by_username(*patient_list, buffer);
+        if (patient != NULL) { 
+            printf("Patient found:\n");
+            printf("First Name: %s\n", patient->fname);
+            printf("Last Name: %s\n", patient->lname);
+            printf("Username: %s\n", patient->username);
+        } else {
+            printf("Patient with username '%s' not found.\n", buffer);
+        }
     }
 }

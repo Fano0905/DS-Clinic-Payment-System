@@ -1,17 +1,24 @@
 # Compiler
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
-CPPFLAGS = -Isrc/exposition/include -Isrc/business/include -Isrc/infrastructure/include -Isrc/include
+CFLAGS = -Wall -Wextra -g
+CPPFLAGS = -Isrc/exposition/include -Isrc/business/include -Isrc/infrastructure/include -Isrc/include -Isrc/business/port
 
 # Executable name
 EXE = payment_system.exe
 
 # All .c files
 SRCS := src/exposition/application/main.c \
+		src/exposition/application/app_launcher.c \
 		src/exposition/application/display.c \
 		src/exposition/application/office.c \
+		src/exposition/application/patient.c \
+		src/exposition/application/chomp.c \
+		src/exposition/adapter/clinic_process_adapter.c \
+		src/exposition/adapter/patient_process_adapter.c	\
         src/business/service/clinic_services.c \
-        src/infrastructure/adapter/infrastructure.c
+		src/business/service/patient_services.c \
+		src/infrastructure/adapter/clinic_adapter.c	\
+		src/infrastructure/adapter/patient_adapter.c
 
 # Corresponding .o files (same folders)
 OBJS := $(SRCS:.c=.o)

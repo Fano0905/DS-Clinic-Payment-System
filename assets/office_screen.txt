@@ -11,9 +11,9 @@
             *                                                             *
             *     Press 2 for checkout_patient                            *
             *                                                             *
-            *     Press 3 to return HOME                                  *
+            *     Press 3 to view all departments                         *
             *                                                             *
-            *                                                             *
+            *     Press 4 to search a patient                             *
             *                                                             *
             *                                                             *
             *                                                             *

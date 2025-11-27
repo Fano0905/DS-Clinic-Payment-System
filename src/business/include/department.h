@@ -3,7 +3,7 @@
 
 typedef struct Department
 {
-    char *department;
+    char *name;
     char *code;
     int ambulance_cost;
     int exclusive_nurse_care;
