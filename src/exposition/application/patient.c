@@ -29,6 +29,7 @@ void pay_for_services(Patient *logged_user,
                       char *buffer,
                       Service_Provided **service_to_pay)
 {
+    char *command;
     while (*service_to_pay == NULL 
            || strcmp((*service_to_pay)->payment_status, "PAID") == 0) {
 
@@ -39,9 +40,11 @@ void pay_for_services(Patient *logged_user,
 
         fgets(buffer, BUFFER_SIZE, stdin);
         chomp(buffer);
+        command = strdup(buffer);
 
-        if (strcmp(strupr(buffer), "CANCEL") == 0) {
+        if (strcmp(strupr(command), "CANCEL") == 0) {
             puts("Payment cancelled.");
+            free(command);
             break;
         }
 

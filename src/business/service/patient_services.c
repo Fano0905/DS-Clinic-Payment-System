@@ -142,7 +142,8 @@ int pay_services_provided(Service_Provided *service_provided,
         strupr(buffer);
 
         if (strcmp(buffer, "YES") == 0) {
-            service_provided->payment_status = "PAID";
+            free(service_provided->payment_status);
+            service_provided->payment_status = strdup("PAID");
             printf("Payment successful.\n");
             return EXIT_SUCCESS;
         }

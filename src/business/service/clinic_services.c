@@ -8,6 +8,9 @@
 #include <unistd.h>
 #include <ctype.h>
 
+void free_service(Service_Provided *service);
+bool hospital_ID_exists(List_Service_Provided *service_provided_list, const char *identifier);
+
 // ---------------------------
 // Generate a hospital identifier like "0001-DEPT-username"
 // Returns a malloc'ed string that the caller must free.
@@ -84,7 +87,6 @@ float calculate_total_service_cost(const char *department_name, int number_days,
     return total;
 }
 
-
 // ---------------------------
 // Create a patient record
 // ---------------------------
@@ -101,6 +103,11 @@ void create_patient_record(const char *first_name,
 
     if (!patient_list) {
         fprintf(stderr, "create_patient_record: patient_list pointer is NULL\n");
+        return;
+    }
+
+    if (find_patient_by_username(*patient_list, username)){
+        fprintf(stderr, "Username => %s already exists. Please choose another one\n", username);
         return;
     }
 
@@ -124,7 +131,7 @@ void create_patient_record(const char *first_name,
         perror("strdup failed");
         return;
     }
-    
+
     strupr(patient->fname);
     strupr(patient->lname);
 
@@ -187,6 +194,17 @@ void create_service_record(const char *username, int number_days, const char *de
     service->insurance_type = insurance_type;
     service->final_cost = final_cost;
 
+    if (validate_service_provided(service_provided_list, service) == -1){
+        fprintf(stderr, "Service [%s] already exists.\n", service->uh_ID);
+        free_service(service);
+        return;
+    }
+    if (validate_service_provided(service_provided_list, service) == -2){
+        fprintf(stderr, "Error : Missing arguments in your object.\n");
+        free_service(service);
+        return;
+    }
+
     // Save service (assume save_service copies data or stores pointer appropriately)
     save_service(service_provided_list, service);
 
@@ -194,6 +212,28 @@ void create_service_record(const char *username, int number_days, const char *de
         perror("Failed to proceed to checkout\n");
         return;
     }
+}
+
+void free_service(Service_Provided *service){
+    if (!service){
+        perror("Nothing to free.\n");
+        return;
+    }
+    free(service->department);
+    free(service->patient_username);
+    free(service->payment_status);
+    free(service->uh_ID);
+    free(service);
+}
+
+int validate_service_provided(List_Service_Provided **service_provided_list, Service_Provided *service){
+
+    if (hospital_ID_exists(*service_provided_list, service->uh_ID))
+        return -1;
+    if (!service->department || !service->exclusive_nurse_care || !service->patient_username || !service->final_cost || !service->insurance_type
+    || !service->room || !service->payment_status || !service->number_days ||!service->hospital_transportation)
+        return -2;
+    return 0;
 }
 
 List_Department *generate_list_departments(void){

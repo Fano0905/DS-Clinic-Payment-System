@@ -6,8 +6,7 @@
 
 /* Function to remove trailing newline characters from a string */
 void chomp(char *s);
-int validate_patient(Patient *patient);
-int validate_service_provided(Service_Provided *service_provided);
-int validate_department(Department *department);
+int validate_service_provided(List_Service_Provided **service_provided_list, Service_Provided *service_provided);
+int validate_department(List_Department **department_list, Department *department);
 
 #endif // CHOMP_H

@@ -40,7 +40,5 @@ struct Patient{
 for now :
     everything works fine
     improvements :
-        I need to delete some printfs;
-        Error handling before writing objects in database
-        Rename functions to facilitate reading and coherence between each modules
+                can't register a patient in the same department twice
     

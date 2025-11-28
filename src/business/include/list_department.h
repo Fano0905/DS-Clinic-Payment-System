@@ -19,7 +19,6 @@ void list_all(const List_Department *head);
 // Delete a department by name
 void delete_dept(List_Department **head, const char *name);
 
-// Find a department by name (returns pointer or NULL)
 Department *get_department_by_name(List_Department *head, const char *name);
 
 void clear_list(List_Department **head);

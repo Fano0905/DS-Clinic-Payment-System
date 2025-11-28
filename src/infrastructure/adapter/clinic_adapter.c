@@ -800,13 +800,11 @@ void delete_service(List_Service_Provided **head, const char *uh_ID)
 
     printf("Service with ID '%s' not found.\n", uh_ID);
 }
-
 void clear_service_list(List_Service_Provided **head)
 {
-
     puts("------ Clearing Service_provided list ------");
 
-    if (head == NULL || *head == NULL) {
+    if (!head || !*head) {
         printf("Service list is already empty.\n");
         return;
     }
@@ -814,27 +812,26 @@ void clear_service_list(List_Service_Provided **head)
     List_Service_Provided *curr = *head;
 
     while (curr) {
-
         List_Service_Provided *next = curr->next_service;
 
-        // Free allocated Service_Provided fields
-        free(curr->service->uh_ID);
-        free(curr->service->patient_username);
-        free(curr->service->department);
-        free(curr->service->payment_status);
+        Service_Provided *svc = curr->service;
 
-        // Free the service structure itself
-        free(curr->service);
+        if (svc) {
+            free(svc->uh_ID);
+            free(svc->patient_username);
+            free(svc->department);
+            free(svc->payment_status);
+            free(svc);
+        }
 
-        // Free the list node
         free(curr);
-
         curr = next;
     }
 
     *head = NULL;
     printf("Successfully freed all services from memory.\n");
 }
+
 
 void print_service(Service_Provided *service)
 {

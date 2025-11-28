@@ -4,29 +4,12 @@
 
 int login(Credentials credentials){
 
-    FILE *f = fopen("assets/auth.txt", "r");
-    char line[256], username[128] = "", password[128] = "";
-
-    if (f == NULL) {
-        printf("Error opening auth.txt\n");
-        return -1;
-    }
-
-    while (fgets(line, sizeof(line), f)) {
-
-        char *p = strchr(line, ':'); if (!p) continue; p++;
-        if (strncmp(line, "username", 8) == 0) sscanf(p, " %127[^\n]", username);
-        if (strncmp(line, "password", 8) == 0) sscanf(p, " %127[^\n]", password);
-
-    }
-
-    if (strcmp(credentials.username, username) != 0 || strcmp(credentials.password, password) != 0) {
+    char awaited_username[128] = "admissions_office", awaited_password[128] = "ao123";
+    
+    if (strcmp(credentials.username, awaited_username) != 0 || strcmp(credentials.password, awaited_password) != 0) {
         printf("Invalid credentials\n");
-        fclose(f);
         return -1;
     }
-
-    fclose(f);
     return 0;
 }
 
@@ -80,4 +63,6 @@ void office(List_Patient **patient_list, List_Service_Provided **service_provide
             printf("Patient with username '%s' not found.\n", buffer);
         }
     }
+    if (strcmp(buffer, "5") == 0)
+        list_all_patients(*patient_list);
 }
