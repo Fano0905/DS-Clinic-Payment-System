@@ -97,7 +97,7 @@ void run_application(){
                         clear_screen();
                         break; // exit to main menu
                     }
-                    office(&patient_list, &service_provided_list, buffer);
+                    clinic_controller(&patient_list, &service_provided_list, buffer);
                 }
             } else
                 printf("Login failed. Returning to main menu.\n");
@@ -121,7 +121,7 @@ void run_application(){
                             clear_screen();
                             break; // exit to main menu
                         }
-                        patient(logged_user, &payment_method_list, &service_provided_list, buffer);
+                        patient_controller(logged_user, &payment_method_list, &service_provided_list, buffer);
                     }
             } else
                 printf("Patient login failed. Returning to main menu.\n");

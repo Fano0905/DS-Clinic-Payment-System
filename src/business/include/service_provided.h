@@ -1,8 +1,6 @@
 #if !defined(SERVICE_PROVIDED_H)
 #define SERVICE_PROVIDED_H
 
-#include <stdbool.h>
-
 typedef struct Service_Provided
 {
     char *uh_ID;

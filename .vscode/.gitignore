@@ -1,6 +1,7 @@
 *.o
 *.exe
 *.c~
-spec.txt
+*.txt
 bin/
 receipt/
+.vscode/

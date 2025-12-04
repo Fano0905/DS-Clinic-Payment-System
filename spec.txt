@@ -9,7 +9,7 @@
 
 Structs : 
 
-struct department {
+typedef struct department {
 // Department
 // Department Code
 // Ambulance Cost
@@ -17,7 +17,7 @@ struct department {
 // Cost for Individual Room
 }
 
-stuct provided_service{
+typedef struct provided_service{
 // Unique Hospital Identifier
 // Patient’s Username
 // Final Cost
@@ -29,16 +29,37 @@ stuct provided_service{
 // Payment Status
 }
 
-struct Patient{
+typedef struct Patient{
     fname
     lname
     Username
     password
 }
 
-/!\ Failed to make a listing of services : 
-for now :
-    everything works fine
-    improvements :
-                can't register a patient in the same department twice
-    
+typedef struct Payment_Method
+{
+    int ID;
+    PaymentType payment;
+    char *username;
+    char *password;
+} Payment_Method;
+
+/!\ Cleaning code /!\
+
+Naming:
+[x] set for business
+[x] create new object for exposition
+[x] get for infrastructure adapter
+[x] find for infrastructure repository
+[x] save new object for infrastructure adapter
+[x] check all include file, change the Naming AND put repository naming inside list_object.h files 
+and only put port services in object_port.h
+
+/!\ Reminder /!\
+Some function names have been changed :
+office => clinic_controller
+patient => patient_controller
+
+Path: 
+src/exposition/controller/clinic_controller.c
+src/exposition/controller/patient_controller.c

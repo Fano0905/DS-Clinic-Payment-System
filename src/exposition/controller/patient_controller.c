@@ -7,7 +7,7 @@
 
 Patient *patient_login(List_Patient *patient_list, Credentials credentials){
     
-    Patient *patient = get_patient_by_username(patient_list, credentials.username);
+    Patient *patient = fetch_patient_by_username(patient_list, credentials.username);
     char *undefined = "Patient not found\n";
     char *invalid = ":\nInvalid credentials : password incorrect\n";
 
@@ -33,7 +33,7 @@ void pay_for_services(Patient *logged_user,
     while (*service_to_pay == NULL 
            || strcmp((*service_to_pay)->payment_status, "PAID") == 0) {
 
-        list_services_for_patient(*service_provided_list, logged_user->username);
+        show_services_for_patient(*service_provided_list, logged_user->username);
 
         printf("Enter the receipt ID of your service: ");
         fflush(stdout);
@@ -48,7 +48,7 @@ void pay_for_services(Patient *logged_user,
             break;
         }
 
-        *service_to_pay = find_service_by_UID(*service_provided_list, buffer);
+        *service_to_pay = get_service_by_UID(*service_provided_list, buffer);
 
         if (*service_to_pay == NULL) {
             printf("Unable to find the following service [%s]\n", buffer);
@@ -65,7 +65,7 @@ void pay_for_services(Patient *logged_user,
 }
 
 
-void patient(Patient *logged_user, List_Payment_Method **payment_method_list, 
+void patient_controller(Patient *logged_user, List_Payment_Method **payment_method_list, 
     List_Service_Provided **service_provided_list, char *buffer)
 {
     printf("Patient management selected.\n");
@@ -80,13 +80,13 @@ void patient(Patient *logged_user, List_Payment_Method **payment_method_list,
     if (strcmp(buffer, "1") == 0){
         clear_screen();
         printf("----- Displaying patient services -----\n");
-        list_services_for_patient(*service_provided_list, logged_user->username);
+        show_services_for_patient(*service_provided_list, logged_user->username);
     }
     if (strcmp(buffer, "2") == 0){
         clear_screen();
         printf("----- Creating payment method for the patient-----\n");
         printf("LOGGED USER => username : [%s]\n", logged_user->username);
-        add_payment_method_info(payment_method_list, logged_user->username, logged_user->password);
+        create_new_payment_method(payment_method_list, logged_user->username, logged_user->password);
     }
     if (strcmp(buffer, "3") == 0)
     {

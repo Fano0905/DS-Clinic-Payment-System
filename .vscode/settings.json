@@ -28,7 +28,10 @@
         "patient_process_port.h": "c",
         "infrastructure_patient_port.h": "c",
         "list_payment_method.h": "c",
-        "clinic_process_port.h": "c"
+        "clinic_process_port.h": "c",
+        "payment_method.h": "c",
+        "unistd.h": "c",
+        "stdarg.h": "c"
     },
     "makefile.configureOnOpen": true
 }

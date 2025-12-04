@@ -2,6 +2,10 @@
 #define LIST_SERVICE_PROVIDED_H
 
 #include "service_provided.h"
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 typedef struct List_Service_Provided
 {
@@ -9,14 +13,15 @@ typedef struct List_Service_Provided
     struct List_Service_Provided *next_service;
 } List_Service_Provided;
 
-void add_service_to_list(List_Service_Provided **head, Service_Provided *service);
 List_Service_Provided *create_service_list(void);
-Service_Provided *get_service_by_uID(List_Service_Provided *head, const char *uhID);
-void list_all_services(const List_Service_Provided *list);
+void save_new_service(List_Service_Provided **head, Service_Provided *service);
+char *find_last_hospital_identifier_from_list(List_Service_Provided *list);
+bool check_hospital_identifier_in_list(List_Service_Provided *list, const char *identifier);
+Service_Provided *find_service_by_UID(List_Service_Provided *head, const char *uhID);
+Service_Provided *find_service_by_username(List_Service_Provided *head, const char *username);
+void list_all_services_provided(const List_Service_Provided *list);
+void list_all_patient_services_provided(const List_Service_Provided *list, const char *username);
 void delete_service(List_Service_Provided **head, const char *uh_ID);
-void clear_service_list(List_Service_Provided **head);
-void add_service_info(List_Service_Provided **list);
-void list_patient_services(const List_Service_Provided *list, const char *username);
-
+void delete_all_services(List_Service_Provided **head);
 
 #endif // LIST_SERVICE_PROVIDED_H

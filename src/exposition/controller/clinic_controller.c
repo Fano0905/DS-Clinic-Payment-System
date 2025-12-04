@@ -13,7 +13,7 @@ int login(Credentials credentials){
     return 0;
 }
 
-void office(List_Patient **patient_list, List_Service_Provided **service_provided_list, char *buffer)
+void clinic_controller(List_Patient **patient_list, List_Service_Provided **service_provided_list, char *buffer)
 {
     List_Department *department_list = auto_generate_list_departments();
     display_clinic_menu();
@@ -25,7 +25,7 @@ void office(List_Patient **patient_list, List_Service_Provided **service_provide
     if (strcmp(buffer, "1") == 0) {
         clear_screen();
         printf("Create patient selected.\n");
-        add_patient_info(patient_list);
+        create_new_patient(patient_list);
     }
     if (strcmp(buffer, "2") == 0) {
         clear_screen();
@@ -35,7 +35,7 @@ void office(List_Patient **patient_list, List_Service_Provided **service_provide
         fflush(stdout);
         fgets(buffer, 128, stdin);
         chomp(buffer);
-        if (get_patient_by_username(*patient_list, buffer)) {
+        if (fetch_patient_by_username(*patient_list, buffer)) {
             printf("\nPatient with username '%s' found. Proceeding to checkout...\n", buffer);
             proceed_to_checkout(buffer, department_list, service_provided_list);
         } else {
@@ -53,7 +53,7 @@ void office(List_Patient **patient_list, List_Service_Provided **service_provide
         printf("Enter the username of the patient to search: "); fflush(stdout);
         fgets(buffer, 128, stdin);
         chomp(buffer);
-        Patient *patient = get_patient_by_username(*patient_list, buffer);
+        Patient *patient = fetch_patient_by_username(*patient_list, buffer);
         if (patient != NULL) { 
             printf("Patient found:\n");
             printf("First Name: %s\n", patient->fname);

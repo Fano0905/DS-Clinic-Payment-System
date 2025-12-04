@@ -9,7 +9,7 @@
 #include <string.h>
 
 int login(Credentials credentials);
-void office(List_Patient **patient_list, List_Service_Provided **service_provided_list, char *buffer);
+void clinic_controller(List_Patient **patient_list, List_Service_Provided **service_provided_list, char *buffer);
 
 
 #endif // OFFICE_H

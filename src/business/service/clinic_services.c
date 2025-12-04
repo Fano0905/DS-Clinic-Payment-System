@@ -1,5 +1,6 @@
 #include "service.h"
 #include "infrastructure_clinic_port.h"
+#include "infrastructure_patient_port.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,19 +8,23 @@
 #include <errno.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <wchar.h>
+#include <locale.h>
+#include <stdarg.h>
+
+#define RECEIPT_WIDTH 80
 
 void free_service(Service_Provided *service);
 bool hospital_ID_exists(List_Service_Provided *service_provided_list, const char *identifier);
 
 // ---------------------------
 // Generate a hospital identifier like "0001-DEPT-username"
-// Returns a malloc'ed string that the caller must free.
 // ---------------------------
 char *generate_hospital_identifier(const char *username, const char *department, List_Service_Provided *service_provided_list) {
     if (username == NULL || department == NULL) return NULL;
 
     // Get last id (may be NULL)
-    char *last_id = get_last_hospital_identifier_from_list(service_provided_list);
+    char *last_id = get_last_hospital_identifier_in_list(service_provided_list);
     int next_num = 1;
     if (last_id != NULL) {
         next_num = atoi(last_id) + 1;
@@ -90,7 +95,7 @@ float calculate_total_service_cost(const char *department_name, int number_days,
 // ---------------------------
 // Create a patient record
 // ---------------------------
-void create_patient_record(const char *first_name,
+void set_new_patient_record(const char *first_name,
                            const char *last_name,
                            const char *username,
                            const char *password,
@@ -106,7 +111,7 @@ void create_patient_record(const char *first_name,
         return;
     }
 
-    if (find_patient_by_username(*patient_list, username)){
+    if (get_patient_by_username(*patient_list, username)){
         fprintf(stderr, "Username => %s already exists. Please choose another one\n", username);
         return;
     }
@@ -135,14 +140,18 @@ void create_patient_record(const char *first_name,
     strupr(patient->fname);
     strupr(patient->lname);
 
-    save_patient(patient_list, patient);
+    add_new_patient(patient_list, patient);
+    if (get_patient_by_username(*patient_list, username) == NULL){
+        perror("Failed to create new patient record\n");
+        return;
+    }
 }
 
 // ---------------------------
 // Create a service record and optionally generate receipt.
 // Ownership: this function allocates a Service_Provided struct and frees it before returning.
 // ---------------------------
-void create_service_record(const char *username, int number_days, const char *department,
+void set_new_service_record(const char *username, int number_days, const char *department,
                           bool hospital_transportation, bool exclusive_nurse_care,
                           bool room, const char *payment_status, bool insurance_type, List_Department *department_list, List_Service_Provided **service_provided_list)
 {
@@ -206,9 +215,9 @@ void create_service_record(const char *username, int number_days, const char *de
     }
 
     // Save service (assume save_service copies data or stores pointer appropriately)
-    save_service(service_provided_list, service);
+    add_new_service(service_provided_list, service);
 
-    if (get_service_by_uID(*service_provided_list, mock_ID) == NULL){
+    if (get_service_by_UID(*service_provided_list, mock_ID) == NULL){
         perror("Failed to proceed to checkout\n");
         return;
     }
@@ -230,15 +239,16 @@ int validate_service_provided(List_Service_Provided **service_provided_list, Ser
 
     if (hospital_ID_exists(*service_provided_list, service->uh_ID))
         return -1;
-    if (!service->department || !service->exclusive_nurse_care || !service->patient_username || !service->final_cost || !service->insurance_type
-    || !service->room || !service->payment_status || !service->number_days ||!service->hospital_transportation)
+    if (!service->department ||!service->patient_username || !service->final_cost 
+    || !service->payment_status || !service->number_days){
         return -2;
+    }
     return 0;
 }
 
 List_Department *generate_list_departments(void){
 
-    return generate_list_department();
+    return auto_generate_departments();
 }
 
 List_Patient *generate_patient_list(void){
@@ -249,32 +259,31 @@ List_Service_Provided *generate_service_provided_list(void){
     return create_service_list();
 }
 
-void list_all_departments(List_Department *department_list)
+void show_all_departments(List_Department *department_list)
 {
     show_departments(department_list);
 }
 
-void list_all_departments_name(List_Department *department_list){
+void show_all_departments_name(List_Department *department_list){
     show_departments_name(department_list);
 }
 
-void list_all_patients(List_Patient *patient_list){
+void show_all_patients(List_Patient *patient_list){
     show_patients(patient_list);
 }
 
-void list_all_services_provided(List_Service_Provided *service_provided_list){
-
-    list_all_services(service_provided_list);
+void show_all_services_provided(List_Service_Provided *service_provided_list){
+    show_services_provided(service_provided_list);
 }
 
-Patient *find_patient_by_uID(List_Patient *patient_list, const char *username)
+Patient *get_patient_by_uID(List_Patient *patient_list, const char *username)
 {
     return find_patient_by_username(patient_list, username);
 }
 
 bool check_patient_exists(List_Patient *patient_list, const char *username)
 {
-    Patient *patient = find_patient_by_username(patient_list, username);
+    Patient *patient = get_patient_by_username(patient_list, username);
 
     if (patient != NULL) {
         return true;
@@ -282,22 +291,109 @@ bool check_patient_exists(List_Patient *patient_list, const char *username)
     return false;
 }
 
-void clear_all_departments(List_Department **department_list){
-    clear_list(department_list);
+void clear_department_list(List_Department **department_list){
+    clear_all_departments(department_list);
 }
 
-void clear_all_patients(List_Patient **patient_list){
-    clear_patient_list(patient_list);
+void clear_patient_list(List_Patient **patient_list){
+    clear_all_patients(patient_list);
 }
 
-void clear_all_services_provided(List_Service_Provided **service_provided_list){
-    clear_service_list(service_provided_list);
+void clear_service_provided_list(List_Service_Provided **service_provided_list){
+    clear_all_services(service_provided_list);
 }
 
-Service_Provided *find_service_by_username_ID(List_Service_Provided *service_provided_list, const char *username){
+Service_Provided *get_service_by_username_ID(List_Service_Provided *service_provided_list, const char *username){
     return get_service_by_username(service_provided_list, username);
 }
 
-bool hospital_ID_exists(List_Service_Provided *service_provided_list, const char *identifier){
-    return check_hospital_identifier_in_list(service_provided_list, identifier);
+// Helper: prints a formatted line inside │ ... │
+void print_wline(const wchar_t *fmt, ...)
+{
+    wchar_t buffer[RECEIPT_WIDTH + 1];
+    wchar_t content[RECEIPT_WIDTH + 1];
+
+    va_list args;
+    va_start(args, fmt);
+    vswprintf(content, RECEIPT_WIDTH - 4, fmt, args);  // Leave room for borders
+    va_end(args);
+
+    // Build: │ content............... │
+    swprintf(buffer, RECEIPT_WIDTH + 1, L"│ %-*ls │", RECEIPT_WIDTH - 4, content);
+    wprintf(L"%ls\n", buffer);
+}
+
+void generate_receipt(const char *uh_ID,
+                      List_Department *department_list,
+                      Patient *patient,
+                      List_Service_Provided *provided_service_list)
+{
+    setlocale(LC_ALL, ""); // REQUIRED for UTF-8 output with wchar
+
+    if (!uh_ID) {
+        fwprintf(stderr, L"generate_receipt: NULL uh_ID\n");
+        return;
+    }
+
+    Service_Provided *svc = get_service_by_UID(provided_service_list, uh_ID);
+    if (!svc) {
+        fwprintf(stderr, L"Service with UH_ID \"%hs\" not found.\n", uh_ID);
+        return;
+    }
+
+    Department *dept = get_department_by_name(department_list, svc->department);
+
+    float initial_cost = svc->insurance_type ?
+                         svc->final_cost / 0.10f :     // private
+                         svc->final_cost / 0.75f ;     // public
+
+    // Top border ┌───────────┐
+    wprintf(L"┌");
+    for (int i = 0; i < RECEIPT_WIDTH - 2; i++) wprintf(L"─");
+    wprintf(L"┐\n");
+
+    // Header
+    print_wline(L"DS CLINIC");
+    print_wline(L"Receipt: %hs", uh_ID);
+    print_wline(L"");
+
+    // Patient info
+    print_wline(L"Patient Information:");
+    print_wline(L"First Name: %hs", patient ? patient->fname : "UNKNOWN");
+    print_wline(L"Last  Name: %hs", patient ? patient->lname : "UNKNOWN");
+    print_wline(L"");
+
+    // Department info
+    print_wline(L"Department: %hs (%hs)",
+                svc->department ? svc->department : "UNKNOWN",
+                dept ? dept->code : "UNK");
+    print_wline(L"Hospitalization Days: %d", svc->number_days);
+    print_wline(L"");
+
+    print_wline(L"Extra Services:");
+    print_wline(L" - Ambulance: %ls   (%.2f €)",
+                svc->hospital_transportation ? L"YES" : L"NO",
+                dept ? dept->ambulance_cost : 0.0f);
+
+    print_wline(L" - Nursing Care: %ls   (%.2f €)",
+                svc->exclusive_nurse_care ? L"YES" : L"NO",
+                dept ? dept->exclusive_nurse_care : 0.0f);
+
+    print_wline(L" - Private Room: %ls   (%.2f €)",
+                svc->room ? L"YES" : L"NO",
+                dept ? dept->individual_room : 0.0f);
+
+    print_wline(L"");
+    print_wline(L"Insurance: %ls", svc->insurance_type ? L"Private" : L"Public");
+
+    // Cost summary
+    print_wline(L"");
+    print_wline(L"Initial Cost: %.2f €", initial_cost);
+    print_wline(L"Final Cost:   %.2f €", svc->final_cost);
+    print_wline(L"");
+
+    // Bottom border └───────────┘
+    wprintf(L"└");
+    for (int i = 0; i < RECEIPT_WIDTH - 2; i++) wprintf(L"─");
+    wprintf(L"┘\n");
 }
