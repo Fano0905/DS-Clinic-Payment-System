@@ -42,11 +42,11 @@ void display_home_menu(void)
     print_center_line(L"");
     print_center_line(L"COMMANDS :");
     print_center_line(L"");
-    print_center_line(L"Press 0 to EXIT");
+    print_center_line(L"Type 0 to EXIT");
     print_center_line(L"");
-    print_center_line(L"Press 1 for OFFICE");
+    print_center_line(L"Type 1 for CLINIC");
     print_center_line(L"");
-    print_center_line(L"Press 2 for PATIENT");
+    print_center_line(L"Type 2 for PATIENT");
 
     for (int i = 0; i < 12; i++)
         print_center_line(L"");
@@ -87,15 +87,15 @@ void display_clinic_menu(void)
     print_clinic_center_line(L"");
     print_clinic_center_line(L"COMMANDS :");
     print_clinic_center_line(L"");
-    print_clinic_center_line(L"Press 0 to EXIT");
+    print_clinic_center_line(L"Type 0 to EXIT");
     print_clinic_center_line(L"");
-    print_clinic_center_line(L"Press 1 for create_patient");
+    print_clinic_center_line(L"Type 1 for create_patient");
     print_clinic_center_line(L"");
-    print_clinic_center_line(L"Press 2 for checkout_patient");
+    print_clinic_center_line(L"Type 2 for checkout_patient");
     print_clinic_center_line(L"");
-    print_clinic_center_line(L"Press 3 to view all departments");
+    print_clinic_center_line(L"Type 3 to view all departments");
     print_clinic_center_line(L"");
-    print_clinic_center_line(L"Press 4 to search a patient");
+    print_clinic_center_line(L"Type 4 to search a patient");
     print_clinic_center_line(L"");
 
     // Padding lines to match the txt file look
@@ -139,13 +139,13 @@ void display_patient_menu(void)
     print_center_patient(L"");
     print_center_patient(L"COMMANDS :");
     print_center_patient(L"");
-    print_center_patient(L"Press 0 to EXIT");
+    print_center_patient(L"Type 0 to EXIT");
     print_center_patient(L"");
-    print_center_patient(L"Press 1 for checking services");
+    print_center_patient(L"Type 1 for checking services");
     print_center_patient(L"");
-    print_center_patient(L"Press 2 for add payment method");
+    print_center_patient(L"Type 2 for add payment method");
     print_center_patient(L"");
-    print_center_patient(L"Press 3 to pay for a service provided");
+    print_center_patient(L"Type 3 to pay for a service provided");
 
     for (int i = 0; i < 12; i++)
         print_center_patient(L"");

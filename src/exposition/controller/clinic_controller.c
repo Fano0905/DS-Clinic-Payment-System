@@ -7,7 +7,7 @@ int login(Credentials credentials){
     char awaited_username[128] = "admissions_office", awaited_password[128] = "ao123";
     
     if (strcmp(credentials.username, awaited_username) != 0 || strcmp(credentials.password, awaited_password) != 0) {
-        printf("Invalid credentials\n");
+        printf("Invalid clinic credentials\n");
         return -1;
     }
     return 0;
@@ -16,6 +16,7 @@ int login(Credentials credentials){
 void clinic_controller(List_Patient **patient_list, List_Service_Provided **service_provided_list, char *buffer)
 {
     List_Department *department_list = auto_generate_list_departments();
+    char patient_username[128];
     display_clinic_menu();
     if (strcmp(buffer, "0") == 0) {
         clear_screen();
@@ -37,7 +38,8 @@ void clinic_controller(List_Patient **patient_list, List_Service_Provided **serv
         chomp(buffer);
         if (fetch_patient_by_username(*patient_list, buffer)) {
             printf("\nPatient with username '%s' found. Proceeding to checkout...\n", buffer);
-            proceed_to_checkout(buffer, department_list, service_provided_list);
+            strcpy(patient_username, buffer);
+            proceed_to_checkout(buffer, department_list, service_provided_list, patient_username);
         } else {
             printf("\nPatient with username '%s' not found.\n", buffer);
         }

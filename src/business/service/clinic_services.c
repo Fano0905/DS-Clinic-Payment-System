@@ -15,7 +15,6 @@
 #define RECEIPT_WIDTH 80
 
 void free_service(Service_Provided *service);
-bool hospital_ID_exists(List_Service_Provided *service_provided_list, const char *identifier);
 
 // ---------------------------
 // Generate a hospital identifier like "0001-DEPT-username"
@@ -144,6 +143,8 @@ void set_new_patient_record(const char *first_name,
     if (get_patient_by_username(*patient_list, username) == NULL){
         perror("Failed to create new patient record\n");
         return;
+    } else {
+        printf("Patient '%s %s' with username '%s' created successfully.\n", first_name, last_name, username);
     }
 }
 

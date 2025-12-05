@@ -19,6 +19,7 @@ List_Patient *create_patient_list();
 void save_new_patient(List_Patient **head, Patient *patient);
 Patient *find_patient_by_username(List_Patient *head, const char *username);
 void print_patient(Patient *patient);
+void print_patient_border(size_t *col_width, size_t ncols);
 void list_all_patients(const List_Patient *list);
 void delete_patient(List_Patient **head, const char *username);
 void delete_all_patients(List_Patient **head);

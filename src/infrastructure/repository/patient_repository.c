@@ -1,7 +1,5 @@
 #include "list_patient.h"
 
-void print_patient_border(size_t *col_width, size_t ncols);
-
 /**
  * Print the content of the entire list.
  */
@@ -63,7 +61,6 @@ Patient *find_patient_by_username(List_Patient *head, const char *username) {
     List_Patient *current = head;
 
     while (current != NULL) {
-        printf(current->patient->username);
         if (strcmp(current->patient->username, username) == 0) {
             return current->patient;
         }

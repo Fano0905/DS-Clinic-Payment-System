@@ -14,6 +14,10 @@ Payment_Method *get_payment_method_by_ID(List_Payment_Method *payment_method, in
     return get_method_by_ID(payment_method, ID);
 }
 
+Payment_Method *get_method_by_username(List_Payment_Method *payment_method_list, const char *username) {
+    return get_payment_method_by_username(payment_method_list, username);
+}
+
 int pay_services_provided(Service_Provided *service_provided,
                           List_Payment_Method *payment_method_list)
 {

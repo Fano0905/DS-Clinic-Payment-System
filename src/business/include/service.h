@@ -12,14 +12,8 @@
 
 /*CLINIC SERVICES*/
 
-void set_new_patient_record(const char *first_name,
-                           const char *last_name,
-                           const char *username,
-                           const char *password,
-                           List_Patient **patient_list);
-void set_new_service_record(const char *username, int number_days, const char *department,
-                          bool hospital_transportation, bool exclusive_nurse_care,
-                          bool room, const char *payment_status, bool insurance_type, List_Department *department_list, List_Service_Provided **service_provided_list);
+void set_new_patient_record(const char *first_name, const char *last_name, const char *username, const char *password, List_Patient **patient_list);
+void set_new_service_record(const char *username, int number_days, const char *department, bool hospital_transportation, bool exclusive_nurse_care, bool room, const char *payment_status, bool insurance_type, List_Department *department_list, List_Service_Provided **service_provided_list);
 void show_all_patients(List_Patient *patient_list);
 Patient *get_patient_by_uID(List_Patient *department_list, const char *username);
 char *generate_hospital_identifier(const char *username, const char *department, List_Service_Provided *list_service_provided);
@@ -47,5 +41,6 @@ void set_new_payment_method(List_Payment_Method **payment_method_list, const cha
 List_Payment_Method *generate_payment_method_list(void);
 int pay_services_provided(Service_Provided *service_provided, List_Payment_Method *payment_method_list);
 Payment_Method *get_payment_method_by_ID(List_Payment_Method *payment_method, int ID);
+Payment_Method *get_method_by_username(List_Payment_Method *payment_method_list, const char *username);
 
 #endif // SERVICE_H

@@ -44,7 +44,7 @@ Patient *check_patient_login(List_Patient *patient_list, int option, Credentials
     return NULL;
 }
 
-void run_application(){
+void run_application(void){
 
     List_Patient *patient_list = generate_patient_list();
     List_Service_Provided *service_provided_list = generate_service_provided_list();
@@ -83,8 +83,8 @@ void run_application(){
             clear_screen();
             printf("Office management selected.\n");
             if (option == check_login(option, credentials)){
-                printf("Login successful. Welcome to the admissions office.\n");
                 clear_screen();
+                printf("Login successful. Welcome to the admissions office.\n");
                 while (1) {
                     display_clinic_menu();
                     display_prompt();
@@ -107,8 +107,8 @@ void run_application(){
             printf("Patient login selected.\n");
             logged_user = check_patient_login(patient_list, option, credentials);
             if (logged_user != NULL){
-                printf("Patient login successful. Welcome to the patient portal.\n");
                     clear_screen();
+                    printf("Patient login successful. Welcome to the patient portal.\n");
                     while (1){
                         display_patient_menu();
                         display_prompt();

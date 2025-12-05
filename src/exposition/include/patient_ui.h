@@ -9,6 +9,5 @@
 #include <string.h>
 
 Patient *patient_login(List_Patient *list, Credentials credentials);
-void patient_controller(Patient *logged_user, List_Payment_Method **payment_method_list, 
-    List_Service_Provided **service_provided_list, char *buffer);
+void patient_controller(Patient *logged_user, List_Payment_Method **payment_method_list, List_Service_Provided **service_provided_list, char *buffer);
 #endif // PATIENT_UI_H

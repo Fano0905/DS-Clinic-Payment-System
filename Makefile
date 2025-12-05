@@ -1,7 +1,7 @@
 # Compiler
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-CPPFLAGS = -Isrc/exposition/include -Isrc/business/include -Isrc/infrastructure/include -Isrc/include -Isrc/business/port
+CPPFLAGS = -Isrc/exposition/include -Isrc/business/include -Isrc/infrastructure/include -Isrc/include -Isrc/business/port -Isrc/business/model
 
 # Executable name
 EXE = payment_system.exe
@@ -17,8 +17,8 @@ SRCS := src/exposition/application/main.c \
 		src/exposition/adapter/patient_process_adapter.c	\
         src/business/service/clinic_services.c \
 		src/business/service/patient_services.c \
-		src/infrastructure/adapter/clinic_adapter.c	\
-		src/infrastructure/adapter/patient_adapter.c\
+		src/infrastructure/adapter/clinic_infrastructure_adapter.c	\
+		src/infrastructure/adapter/patient_infrastructure_adapter.c\
 		src/infrastructure/repository/service_provided_repository.c \
 		src/infrastructure/repository/payment_method_repository.c \
 		src/infrastructure/repository/patient_repository.c \

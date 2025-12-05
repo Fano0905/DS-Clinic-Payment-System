@@ -1,6 +1,6 @@
 #include "list_department.h"
 
-List_Department *create_department_list(){
+List_Department *create_department_list(void){
 
     return NULL;
 }

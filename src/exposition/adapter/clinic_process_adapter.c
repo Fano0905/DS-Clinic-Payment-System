@@ -11,6 +11,17 @@ bool is_all_alpha(const char *s){
     return true;
 }
 
+bool regex_match(const char *string){
+
+    for (int i = 0; string[i] != '\0'; i++) {
+        if (string[i] != '_' && !isalnum((unsigned char)string[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int check_patient_input(char *fname, char *lname, char *username, char *password){
 
     if (fname == NULL || lname == NULL || username == NULL || password == NULL){
@@ -19,57 +30,70 @@ int check_patient_input(char *fname, char *lname, char *username, char *password
     if (strlen(fname) == 0 || strlen(lname) == 0 || strlen(username) == 0 || strlen(password) == 0){
         return -1;
     }
-    if (!is_all_alpha(username) || !is_all_alpha(fname) || !is_all_alpha(lname)){
+    if (!regex_match(username) || !is_all_alpha(fname) || !is_all_alpha(lname) || !isprint((unsigned char)*password)){
         return -1;
     }
     return 0;
 
 }
 
-void create_new_patient(List_Patient **patient_list){
-
+void create_new_patient(List_Patient **patient_list)
+{
     char fname[256], lname[256], username[256], password[256], buffer[256];
 
-    printf("Would you like to add a new patient to the database? (yes/no): ");
-    fflush(stdin);
-    fgets(buffer, sizeof(buffer), stdin);
-    chomp(buffer);
-    strupr(buffer);
+    while (1) {
+        printf("Would you like to add a new patient to the database? (yes/no): ");
+        fgets(buffer, sizeof(buffer), stdin);
+        chomp(buffer);
+        strupr(buffer);
 
-    if (strcmp(buffer, "NO") == 0){
-        printf("Aborting patient creation.\n");
-        return;
+        if (strcmp(buffer, "NO") == 0) {
+            printf("Aborting patient creation.\n");
+            return;
+        }
+
+        if (strcmp(buffer, "YES") != 0) {
+            printf("Invalid input. Please try again.\n");
+            continue;
+        }
+
+        break;
     }
-    if (strcmp(buffer, "YES") != 0){
-        printf("Invalid input. Please try again.\n");
-        create_new_patient(patient_list);
-        return;
-    }
 
-    printf("Enter first name: ");
-    fgets(fname, sizeof(fname), stdin);
-    chomp(fname);
+    while (1) {
+        printf("Enter first name: ");
+        fgets(fname, sizeof(fname), stdin);
+        chomp(fname);
 
-    printf("Enter last name: ");
-    fgets(lname, sizeof(lname), stdin);
-    chomp(lname);
+        printf("Enter last name: ");
+        fgets(lname, sizeof(lname), stdin);
+        chomp(lname);
 
-    printf("Enter username: ");
-    fgets(username, sizeof(username), stdin);
-    chomp(username);
+        printf("Enter username: ");
+        fgets(username, sizeof(username), stdin);
+        chomp(username);
 
-    printf("Enter password: ");
-    fgets(password, sizeof(password), stdin);
-    chomp(password);
+        printf("Enter password: ");
+        fgets(password, sizeof(password), stdin);
+        chomp(password);
 
-    if (check_patient_input(fname, lname, username, password) != 0){
-        printf("Invalid input(s). Please try again.\n");
-        create_new_patient(patient_list);
+        if (check_patient_input(fname, lname, username, password) != 0) {
+            printf("Invalid input(s). Please try again.\n");
+            printf("Reminder:\n"
+                   "  - First name and Last name: alphabetic only.\n"
+                   "  - Username: alphanumeric + underscore.\n"
+                   "  - Password: printable ASCII only.\n\n");
+
+            // RESET INPUTS by restarting loop
+            fname[0] = lname[0] = username[0] = password[0] = '\0';
+            continue;
+        }
+
+        break; // inputs valid
     }
 
     set_new_patient_record(fname, lname, username, password, patient_list);
 }
-
 
 bool isnum(const char *s) {
     if (!s || *s == '\0') return false;
@@ -82,13 +106,6 @@ bool isnum(const char *s) {
 }
 
 int check_provided_service_input(int nb_days, char *payment_status, bool transport, bool extra_nurse_care, bool individual_room, bool insurance_type){
-
-    printf("value of nb_days: %d\n", nb_days);
-    printf("value of payment_status: %s\n", payment_status);
-    printf("value of transport: %d\n", transport);
-    printf("value of extra_nurse_care: %d\n", extra_nurse_care);
-    printf("value of individual_room: %d\n", individual_room);
-    printf("value of insurance_type: %d\n", insurance_type);
 
     if (nb_days <= 0){
         printf("nb_days check failed\n");
@@ -118,88 +135,145 @@ int check_provided_service_input(int nb_days, char *payment_status, bool transpo
     return 0;
 }
 
-
-void proceed_to_checkout(char *buffer, List_Department *department_list, List_Service_Provided **service_provided_list){
-    
+void proceed_to_checkout(char *buffer,
+                         List_Department *department_list,
+                         List_Service_Provided **service_provided_list, const char *username)
+{
     if (!service_provided_list) {
-        fprintf(stderr, "add_service_info: invalid list pointer\n");
+        fprintf(stderr, "proceed_to_checkout: invalid service list\n");
         return;
     }
 
     char patient_username[128];
     char department[128];
     char payment_status[64] = "Pending";
+
     int nb_days = 0;
-    bool transport;
-    bool extra_nurse_care;
-    bool individual_room;
-    bool insurance_type;
+    bool transport = false;
+    bool extra_nurse_care = false;
+    bool individual_room = false;
+    bool insurance_type = false;
 
-    printf("Would you like to proceed to checkout a patient service? (yes/no): ");
-    fgets(buffer, sizeof(buffer), stdin);
-    chomp(buffer);
-    strupr(buffer);
-    if (strcmp(buffer, "NO") == 0){
-        printf("Aborting service checkout.\n");
-        return;
-    }
-    if (strcmp(buffer, "YES") != 0){
-        printf("Invalid input. Please try again.\n");
-        proceed_to_checkout(buffer, department_list, service_provided_list);
-        return;
-    }
+    while (1)
+    {
+        printf("Would you like to proceed to checkout a patient service? (yes/no): ");
+        fgets(buffer, sizeof(buffer), stdin);
+        chomp(buffer);
+        strupr(buffer);
 
+        if (strcmp(buffer, "NO") == 0) {
+            printf("Aborting service checkout.\n");
+            return;
+        }
+        if (strcmp(buffer, "YES") == 0) break;
 
-    printf("Enter patient username: ");
-    fgets(patient_username, sizeof(patient_username), stdin);
-    chomp(patient_username);
-
-    printf("Enter department ");
-    show_helper(department_list);
-    printf("=> ");
-    fgets(department, sizeof(department), stdin);
-    chomp(department);
-    strupr(department);
-
-    printf("Enter number of days spent at the hospital by the patient: ");
-    fgets(buffer, sizeof(buffer), stdin);
-    chomp(buffer);
-    if (!isnum(buffer)) {
-        printf("Invalid number of days. Please try again.\n");
-        proceed_to_checkout(buffer, department_list, service_provided_list);
-        return;
-    }
-    nb_days = atoi(buffer);
-
-    printf("Hospital transportation ? (1=yes, 0=no): ");
-    fgets(buffer, sizeof(buffer), stdin);
-    chomp(buffer);
-    transport = atoi(buffer);
-
-    printf("Exclusive nurse care ? (1=yes, 0=no): ");
-    fgets(buffer, sizeof(buffer), stdin);
-    chomp(buffer);
-    extra_nurse_care = atoi(buffer);
-
-    printf("Individual room ? (1=yes, 0=no): ");
-    fgets(buffer, sizeof(buffer), stdin);
-    chomp(buffer);
-    individual_room = atoi(buffer);
-
-    printf("Insurance type (1=private, 0=public): ");
-    fgets(buffer, sizeof(buffer), stdin);
-    chomp(buffer);
-    insurance_type = atoi(buffer);
-
-    if (check_provided_service_input(nb_days, payment_status, transport, extra_nurse_care, individual_room, insurance_type) != 0){
-        printf("Invalid input(s). Please try again.\n");
-        proceed_to_checkout(buffer, department_list, service_provided_list);
-        return;
+        printf("Invalid input. Please answer YES or NO.\n");
     }
 
-    set_new_service_record(patient_username, nb_days, department, transport, extra_nurse_care, individual_room, payment_status, insurance_type, department_list, service_provided_list);
+    // -------------------------------
+    // GET PATIENT USERNAME
+    // -------------------------------
+    strcpy(patient_username, username);
 
+    // -------------------------------
+    // GET DEPARTMENT
+    // -------------------------------
+    while (1) {
+        printf("Enter department ");
+        show_helper(department_list);
+        printf("=> ");
+
+        fgets(department, sizeof(department), stdin);
+        chomp(department);
+        strupr(department);
+
+        if (strlen(department) > 0) break;
+
+        printf("Invalid department. Please try again.\n");
+    }
+
+    // -------------------------------
+    // NUMBER OF DAYS
+    // -------------------------------
+    while (1) {
+        printf("Enter number of days: ");
+        fgets(buffer, sizeof(buffer), stdin);
+        chomp(buffer);
+
+        if (isnum(buffer)) {
+            nb_days = atoi(buffer);
+            break;
+        }
+        printf("Invalid number. Please try again.\n");
+    }
+
+    // -------------------------------
+    // EXTRA OPTIONS (1 or 0)
+    // -------------------------------
+    while (1) {
+        printf("Hospital transportation ? (1=yes, 0=no): ");
+        fgets(buffer, sizeof(buffer), stdin); chomp(buffer);
+        if (strcmp(buffer, "1") == 0 || strcmp(buffer, "0") == 0) {
+            transport = atoi(buffer);
+            break;
+        }
+        printf("Enter 1 or 0.\n");
+    }
+
+    while (1) {
+        printf("Exclusive nurse care ? (1=yes, 0=no): ");
+        fgets(buffer, sizeof(buffer), stdin); chomp(buffer);
+        if (strcmp(buffer, "1") == 0 || strcmp(buffer, "0") == 0) {
+            extra_nurse_care = atoi(buffer);
+            break;
+        }
+        printf("Enter 1 or 0.\n");
+    }
+
+    while (1) {
+        printf("Individual room ? (1=yes, 0=no): ");
+        fgets(buffer, sizeof(buffer), stdin); chomp(buffer);
+        if (strcmp(buffer, "1") == 0 || strcmp(buffer, "0") == 0) {
+            individual_room = atoi(buffer);
+            break;
+        }
+        printf("Enter 1 or 0.\n");
+    }
+
+    while (1) {
+        printf("Insurance type (1=private, 0=public): ");
+        fgets(buffer, sizeof(buffer), stdin); chomp(buffer);
+        if (strcmp(buffer, "1") == 0 || strcmp(buffer, "0") == 0) {
+            insurance_type = atoi(buffer);
+            break;
+        }
+        printf("Enter 1 or 0.\n");
+    }
+
+    if (check_provided_service_input(nb_days, payment_status,
+                                     transport, extra_nurse_care,
+                                     individual_room, insurance_type) != 0)
+    {
+        printf("Invalid combination of inputs. Restarting checkout...\n");
+        return proceed_to_checkout(buffer, department_list, service_provided_list, username);
+    }
+
+    set_new_service_record(
+        patient_username,
+        nb_days,
+        department,
+        transport,
+        extra_nurse_care,
+        individual_room,
+        payment_status,
+        insurance_type,
+        department_list,
+        service_provided_list
+    );
+
+    printf("Service checkout completed successfully!\n");
 }
+
 
 void show_helper(List_Department *department_list){
     show_all_departments_name(department_list);

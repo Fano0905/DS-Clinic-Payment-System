@@ -35,7 +35,7 @@ void pay_for_services(Patient *logged_user,
 
         show_services_for_patient(*service_provided_list, logged_user->username);
 
-        printf("Enter the receipt ID of your service: ");
+        printf("Enter the receipt ID of your service (or CANCEL): ");
         fflush(stdout);
 
         fgets(buffer, BUFFER_SIZE, stdin);
@@ -92,6 +92,12 @@ void patient_controller(Patient *logged_user, List_Payment_Method **payment_meth
     {
         clear_screen();
         printf("----- Proceeding to payment -----\n");
+
+        while (get_method_by_username(*payment_method_list, logged_user->username) == NULL) {
+            printf("No payment methods found at your username. Please create a payment method first.\n");
+            printf("Redirecting to create payment method...\n");
+            create_new_payment_method(payment_method_list, logged_user->username, logged_user->password);
+        }
 
         Service_Provided *service_to_pay = NULL;
 

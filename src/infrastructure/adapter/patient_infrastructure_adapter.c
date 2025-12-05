@@ -12,6 +12,12 @@ Payment_Method *get_method_by_ID(List_Payment_Method *payment_method, int ID){
     return find_method_by_ID(payment_method, ID);
 }
 
+Payment_Method *get_payment_method_by_username(
+        List_Payment_Method *payment_method_list,
+        const char *username){
+    return find_payment_method_by_username(payment_method_list, username);
+}
+
 int generate_auto_payment_ID(List_Payment_Method **payment_method_list){
     return find_last_payment_ID(payment_method_list);
 }
@@ -21,12 +27,18 @@ void add_payment_method_to_list(List_Payment_Method **payment_method_list,
                                     save_new_payment_method(payment_method_list, method);
                                 }
 
-void clear_payment_method_list(List_Payment_Method **payment_method_list){
-    delete_all_payment_methods(payment_method_list);
+void show_payment_method(Payment_Method *method){
+    print_payment_method(method);
 }
 
-Payment_Method *get_payment_method_by_username(
-        List_Payment_Method *payment_method_list,
-        const char *username){
-    return find_payment_method_by_username(payment_method_list, username);
+void show_all_payment_methods(const List_Payment_Method *payment_method_list){
+    list_all_payment_methods(payment_method_list);
+}
+
+void show_all_user_payment_method(const List_Payment_Method *payment_method_list, const char *username){
+    list_all_user_payment_method(payment_method_list, username);
+}
+
+void clear_payment_method_list(List_Payment_Method **payment_method_list){
+    delete_all_payment_methods(payment_method_list);
 }

@@ -43,23 +43,3 @@ typedef struct Payment_Method
     char *username;
     char *password;
 } Payment_Method;
-
-/!\ Cleaning code /!\
-
-Naming:
-[x] set for business
-[x] create new object for exposition
-[x] get for infrastructure adapter
-[x] find for infrastructure repository
-[x] save new object for infrastructure adapter
-[x] check all include file, change the Naming AND put repository naming inside list_object.h files 
-and only put port services in object_port.h
-
-/!\ Reminder /!\
-Some function names have been changed :
-office => clinic_controller
-patient => patient_controller
-
-Path: 
-src/exposition/controller/clinic_controller.c
-src/exposition/controller/patient_controller.c

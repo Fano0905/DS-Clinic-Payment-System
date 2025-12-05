@@ -27,7 +27,11 @@ void create_new_payment_method(List_Payment_Method **payment_method_list, const 
 
     while (type == INVALID) {
 
-        printf("Enter the type of payment (1) PAYPAL, (2) BANK CARD, (3) CHECK: ");
+        printf("Select payment method type:\n");
+        printf("1. PAYPAL\n");
+        printf("2. BANK CARD\n");
+        printf("3. CHECK\n");
+        printf("> ");
         fgets(type_input, sizeof(type_input), stdin);
         chomp(type_input);
         
