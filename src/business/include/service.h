@@ -18,6 +18,9 @@ void show_all_patients(List_Patient *patient_list);
 Patient *get_patient_by_uID(List_Patient *department_list, const char *username);
 char *generate_hospital_identifier(const char *username, const char *department, List_Service_Provided *list_service_provided);
 void generate_receipt(const char *uh_ID, List_Department *department_list, Patient *patient, List_Service_Provided *service_provided_list);
+float calculate_total_service_cost(const char *department_name, int number_days,
+                                   bool hospital_transportation, bool exclusive_nurse_care,
+                                   bool room, bool insurance_type, List_Department *department_list);
 bool check_patient_exists(List_Patient *patient_list, const char *username);
 List_Department *generate_list_departments(void);
 void clear_department_list(List_Department **department_list);
