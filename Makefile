@@ -16,6 +16,7 @@ CPPFLAGS = -Isrc/exposition/include \
            -Isrc/include \
            -Isrc/business/port \
            -Isrc/business/model \
+		   -Isrc/test/include
 
 # ===============================
 # Target
@@ -42,7 +43,8 @@ src/infrastructure/adapter/patient_infrastructure_adapter.c \
 src/infrastructure/repository/service_provided_repository.c \
 src/infrastructure/repository/payment_method_repository.c \
 src/infrastructure/repository/patient_repository.c \
-src/infrastructure/repository/department_repository.c
+src/infrastructure/repository/department_repository.c	\
+src/test/clinic_services_test.c
 
 # ===============================
 # Object files (mirrored structure)
